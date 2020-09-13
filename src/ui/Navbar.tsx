@@ -1,5 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { Logo } from "./navbar/Logo";
+import { CompanyName } from "./navbar/CompanyName";
+import { colorPallet } from "./../constants/index";
 
 const styles = StyleSheet.create({
   navbar: {
@@ -9,7 +12,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "green",
+    backgroundColor: colorPallet.primary,
   },
   text: {
     color: "wheat",
@@ -20,8 +23,8 @@ const styles = StyleSheet.create({
 export const Navbar = () => {
   return (
     <View style={styles.navbar}>
-      <Text style={styles.text}>Logo</Text>
-      <Text style={styles.text}>Company Name</Text>
+      <Logo />
+      <CompanyName />
       <Text style={styles.text}>Icon</Text>
     </View>
   );
