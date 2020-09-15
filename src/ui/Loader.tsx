@@ -1,11 +1,27 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { dimensions, colorPallet } from "../constants/index";
+import React, { useEffect, useRef, useContext } from "react";
+import { View, StyleSheet, Animated } from "react-native";
+import { dimensions, colorPallet, isNative } from "../constants/index";
+import { LoaderContext } from "../context/LoaderContext";
+
+const animationTiming = 1000;
+
+const value = new Animated.Value(0);
+
+const animationWOL = Animated.timing(value, {
+  toValue: 1,
+  duration: animationTiming,
+  useNativeDriver: true,
+});
+
+const animation = Animated.loop(animationWOL);
+
+const spin = value.interpolate({
+  inputRange: [0, 1],
+  outputRange: ["0deg", "360deg"],
+});
 
 const styles = StyleSheet.create({
   backdrop: {
-    /* width: dimensions.width, */
-    /* height: dimensions.height, */
     position: "absolute",
     backgroundColor: "#000000CC",
     top: 0,
@@ -25,6 +41,10 @@ const styles = StyleSheet.create({
       {
         translateY:
           dimensions.height * 0.4 > 200 ? -200 : dimensions.height * -0.4,
+      },
+      {
+        // @ts-ignore: Accepts even when TSC is not updated
+        rotateZ: spin,
       },
     ],
     width: dimensions.width * 0.8,
@@ -49,12 +69,41 @@ const styles = StyleSheet.create({
 });
 
 export const Loader = () => {
+  /* const [value, _setValue] = useState(new Animated.ValueXY({ x: 0, y: 0 })); */
+  const { isLoading } = useContext(LoaderContext);
+  const intervalVar = useRef<any>(null);
+  useEffect(() => {
+    if (isLoading) {
+      animation.start();
+      if (!isNative) {
+        intervalVar.current = setInterval(() => {
+          animation.reset();
+          animation.start();
+        }, animationTiming);
+      }
+    } else {
+      animation.reset();
+      animation.stop();
+      if (intervalVar.current) {
+        clearInterval(intervalVar.current);
+      }
+    }
+    return () => {
+      animation.reset();
+      animation.stop();
+      if (intervalVar.current) {
+        clearInterval(intervalVar.current);
+      }
+    };
+  }, [isLoading]);
+
+  if (!isLoading) {
+    return <></>;
+  }
+
   return (
     <View style={styles.backdrop}>
-      <View style={styles.loader}>
-        <Text style={styles.text}>Loading</Text>
-        <Text style={styles.text}> Please Wait!</Text>
-      </View>
+      <Animated.View style={styles.loader}></Animated.View>
     </View>
   );
 };
