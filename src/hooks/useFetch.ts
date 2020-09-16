@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { api } from "../constants/index";
 
 type useFetchResponse = <Response>(
@@ -6,7 +6,7 @@ type useFetchResponse = <Response>(
 ) => [Response | null, boolean, Error | null];
 
 export const useFetch: useFetchResponse = (url) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<any>(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +17,14 @@ export const useFetch: useFetchResponse = (url) => {
     })
       .then((data) => data.json())
       .then((response) => {
-        setData(response);
+        setData(
+          !!data
+            ? {
+                ...response,
+                articles: [...data.articles, ...response.articles],
+              }
+            : response
+        );
         setLoading(false);
       })
       .catch((err) => {
@@ -61,26 +68,38 @@ export const useFetchAll: useFetchAllResponse = <T>(urls: urlList) => {
   const [staging, setStaging] = useState(createObject<T | null>(urls, null));
   const [error, setError] = useState(createObject<Error | null>(urls, null));
   const [loading, setLoading] = useState(createObject<boolean>(urls, false));
+  const urlsRef = useRef(createObject<string | null>(urls, null));
 
   useEffect(() => {
     Object.entries<string>(urls).map(([key, url]) => {
-      setLoading((state) => ({ ...state, [key]: true }));
-      fetch(url, {
-        headers: { "X-Api-Key": api.token },
-      })
-        .then((data) => data.json())
-        .then((response) => {
-          setStaging((state) => {
-            return { ...state, [key]: response };
-          });
-          setLoading((state) => ({ ...state, [key]: false }));
+      if (urlsRef.current[key] !== url) {
+        urlsRef.current[key] = url;
+        setLoading((state) => ({ ...state, [key]: true }));
+        fetch(url, {
+          headers: { "X-Api-Key": api.token },
         })
-        .catch((err) => {
-          setError((state) => ({ ...state, [key]: err }));
-          setLoading((state) => ({ ...state, [key]: false }));
-        });
+          .then((data) => data.json())
+          .then((response) => {
+            setStaging((state) => {
+              return {
+                ...state,
+                [key]: {
+                  ...response,
+                  articles: !!data
+                    ? [...(data as any)![key].articles, ...response.articles]
+                    : response.articles,
+                },
+              };
+            });
+            setLoading((state) => ({ ...state, [key]: false }));
+          })
+          .catch((err) => {
+            setError((state) => ({ ...state, [key]: err }));
+            setLoading((state) => ({ ...state, [key]: false }));
+          });
+      }
     });
-  }, []);
+  }, [urls]);
 
   useEffect(() => {
     if (Object.values(loading).every((l) => !l)) {

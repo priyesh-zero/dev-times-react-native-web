@@ -13,13 +13,14 @@ export const api = {
   token: "e19dfd3d094346089bb8cdfb9521d0a4",
   baseUri: "https://newsapi.org/v2/top-headlines",
   country: "in",
+  language: "en",
   categories: {
-    ENTERTAINMENT: "entertainment",
-    GENERAL: "general",
+    /* GENERAL: "general", */
     HEALTH: "health",
     SCIENCE: "science",
-    SPORTS: "sports",
     TECHNOLOGY: "technology",
+    ENTERTAINMENT: "entertainment",
+    SPORTS: "sports",
   },
   setCountry: function (countryCode: string) {
     this.country = countryCode;
@@ -28,10 +29,10 @@ export const api = {
   setPageSize: function (pageSize: number) {
     this.pageSize = pageSize;
   },
-  headlines: function () {
-    return `${this.baseUri}?country=${this.country}&pageSize=${this.pageSize}`;
+  headlines: function (page: number) {
+    return `${this.baseUri}?country=${this.country}&pageSize=${this.pageSize}&page=${page}`;
   },
-  category: function (category: string) {
-    return `${this.baseUri}?category=${category}&pageSize=${this.pageSize}`;
+  category: function (category: string, page: number) {
+    return `${this.baseUri}?category=${category}&pageSize=${this.pageSize}&country=${this.country}&page=${page}`;
   },
 };

@@ -35,7 +35,11 @@ const styles = StyleSheet.create({
 export const HeadingCard: FC<{ article: article }> = ({ article }) => {
   return (
     <TouchableOpacity style={styles.container}>
-      <Image source={{ uri: article.urlToImage }} style={styles.image} />
+      <Image
+        source={{ uri: article.urlToImage }}
+        defaultSource={require("../../../assets/default.jpeg")}
+        style={styles.image}
+      />
       <View style={styles.textView}>
         <Text style={styles.text}>{article.title}</Text>
       </View>
