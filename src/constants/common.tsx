@@ -5,6 +5,8 @@ export const colorPallet = {
   danger: "#ff4444",
   textPrimary: "#D1D1D1",
   textDanger: "#CC0000",
+  textBlackPrimary: "#263238",
+  textBlackSecondary: "#37474F",
 };
 
 export const dimensions = Dimensions.get("window");

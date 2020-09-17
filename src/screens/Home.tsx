@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { StyleSheet, View, Text, Button, ScrollView } from "react-native";
+import { StyleSheet, Text, ScrollView } from "react-native";
 import { useFetch, useFetchAll } from "../hooks/useFetch";
 import { LoaderContext } from "../context/LoaderContext";
 import { api, colorPallet } from "../constants/index";
@@ -34,18 +34,20 @@ const pageList = (): { [key: string]: number } => {
   return list;
 };
 
-export const Home = () => {
+interface Props {}
+
+export const Home: React.FC<Props> = () => {
   const { toggleLoading } = useContext(LoaderContext);
 
   const [page, setPage] = React.useState(1);
 
   const [categoryPage, setCategoryPage] = React.useState(pageList());
 
-  const [headLinesData, headLinesLoading, headlinesError] = useFetch<
+  const [headLinesData, _headLinesLoading, headlinesError] = useFetch<
     HeadlineResponse
   >(api.headlines(page));
 
-  const [sectionData, sectionLoading, sectionError] = useFetchAll<
+  const [sectionData, _sectionLoading, sectionError] = useFetchAll<
     HeadlineResponse
   >(urlList(categoryPage));
 

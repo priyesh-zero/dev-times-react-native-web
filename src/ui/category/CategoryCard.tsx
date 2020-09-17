@@ -1,7 +1,10 @@
 import React, { FC } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, Text } from "react-native";
-import { isNative, dimensions, colorPallet } from "../../constants/index";
+import { StyleSheet, TouchableOpacity, Image, Text } from "react-native";
+import { isNative, dimensions } from "../../constants/index";
 import { article } from "../../interface/Headline";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationStack } from "src/interface/Navigation";
+import { setItem } from "../../services/StorageService";
 
 const dim = {
   x: isNative ? dimensions.width : 500,
@@ -37,11 +40,18 @@ const styles = StyleSheet.create({
   },
 });
 
-export const CategoryCard: FC<{ article: article }> = ({ article }) => {
-  console.log(article.title);
-  console.log(article.urlToImage);
+interface Props {
+  article: article;
+}
+
+export const CategoryCard: FC<Props> = ({ article }) => {
+  const navigation = useNavigation<NavigationStack<"Home">>();
+  const handleClick = () => {
+    setItem("activeArticle", JSON.stringify(article));
+    navigation.push("Article");
+  };
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={handleClick}>
       <Image
         source={{ uri: article.urlToImage }}
         defaultSource={require("../../../assets/default.jpeg")}
@@ -51,10 +61,3 @@ export const CategoryCard: FC<{ article: article }> = ({ article }) => {
     </TouchableOpacity>
   );
 };
-
-/* <TouchableOpacity style={styles.container}> */
-/*       <Image source={{ uri: article.urlToImage }} style={styles.image} /> */
-/*       <View style={styles.textView}> */
-/*         <Text style={styles.text}>{article.title}</Text> */
-/*       </View> */
-/*     </TouchableOpacity> */

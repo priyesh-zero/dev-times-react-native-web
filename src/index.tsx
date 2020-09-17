@@ -1,19 +1,19 @@
+import "react-native-gesture-handler";
 import React from "react";
+import { View, StyleSheet, Text } from "react-native";
+
 import { LoaderProvider } from "./context/LoaderContext";
-import { isNative } from "./constants";
-import { Navbar } from "./ui/Navbar";
-import { View, StyleSheet } from "react-native";
-import { Home } from "./screens/Home";
 import { Loader } from "./ui/Loader";
 import { StatusBar } from "./ui/StatusBar";
+import { Routes } from "./routes";
 
 export const MainApp = () => {
   return (
     <LoaderProvider>
-      {isNative && <StatusBar />}
-      <Navbar />
+      <StatusBar />
+
       <View style={styles.container}>
-        <Home />
+        <Routes />
       </View>
       <Loader />
     </LoaderProvider>

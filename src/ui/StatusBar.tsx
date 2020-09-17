@@ -6,7 +6,7 @@ export const StatusBar = () => <View style={styles.statusBar}></View>;
 
 const styles = StyleSheet.create({
   statusBar: {
-    height: 25,
+    height: 1, // 1 is to make header sticky on web; 25 worked for me if not using react-navigation-header
     backgroundColor: colorPallet.primary,
   },
 });
