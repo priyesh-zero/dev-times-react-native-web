@@ -7,7 +7,7 @@ import { NavigationStack } from "src/interface/Navigation";
 import { setItem } from "../../services/StorageService";
 
 const dim = {
-  x: isNative ? dimensions.width : 500,
+  x: isNative ? dimensions.width - 20 : 500,
   y: 100,
 };
 

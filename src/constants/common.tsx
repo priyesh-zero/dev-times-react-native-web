@@ -12,7 +12,7 @@ export const colorPallet = {
 export const dimensions = Dimensions.get("window");
 
 export const api = {
-  token: "e19dfd3d094346089bb8cdfb9521d0a4",
+  token: process.env.REACT_NATIVE_API_KEY,
   baseUri: "https://newsapi.org/v2/top-headlines",
   country: "in",
   language: "en",

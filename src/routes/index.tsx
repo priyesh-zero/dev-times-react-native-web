@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { RootStackList } from "../interface/Navigation";
 import { Home } from "../screens/Home";
@@ -46,6 +46,11 @@ export const Routes = () => {
           name="WebView"
           component={WebViewScreen}
           initialParams={{ url: "https://github.com/priyesh-zero" }}
+          options={{
+            header: () => (
+              <View style={{ backgroundColor: "#FFF", height: 25 }}></View>
+            ),
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

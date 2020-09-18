@@ -2,6 +2,9 @@ import React, { FC } from "react";
 import { View, StyleSheet, TouchableOpacity, Image, Text } from "react-native";
 import { isNative, dimensions, colorPallet } from "../../constants/index";
 import { article } from "../../interface/Headline";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationStack } from "../../interface/Navigation";
+import { setItem } from "../../services/StorageService";
 
 const styles = StyleSheet.create({
   container: {
@@ -33,8 +36,13 @@ const styles = StyleSheet.create({
 });
 
 export const HeadingCard: FC<{ article: article }> = ({ article }) => {
+  const navigation = useNavigation<NavigationStack<"Home">>();
+  const handleClick = () => {
+    setItem("activeArticle", JSON.stringify(article));
+    navigation.push("Article");
+  };
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handleClick}>
       <Image
         source={{ uri: article.urlToImage }}
         defaultSource={require("../../../assets/default.jpeg")}

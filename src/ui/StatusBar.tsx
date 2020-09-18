@@ -2,7 +2,11 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { colorPallet } from "../constants/index";
 
-export const StatusBar = () => <View style={styles.statusBar}></View>;
+interface StatusBarProps {}
+
+export const StatusBar: React.FC<StatusBarProps> = () => {
+  return <View style={[styles.statusBar]}></View>;
+};
 
 const styles = StyleSheet.create({
   statusBar: {
